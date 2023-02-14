@@ -87,7 +87,6 @@ resource "aws_cloudfront_distribution" "website_distribution" {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "S3Origin"
-    path_pattern = "/*"
     bucket = aws_s3_bucket.logs_bucket.name
     viewer_protocol_policy = "redirect-to-https"
   }
