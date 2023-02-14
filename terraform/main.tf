@@ -55,7 +55,6 @@ resource "aws_route53_record" "website_record" {
   name = "www.codyfisher.dev"
   type = "A"
   zone_id = data.aws_route53_zone.primary.zone_id
-  ttl = 300
   
   alias {
     name                   = aws_cloudfront_distribution.website_distribution.domain_name
