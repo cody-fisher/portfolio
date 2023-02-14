@@ -18,6 +18,10 @@ provider "aws" {
   region = "us-east-1"
 }
 
+data "aws_route53_zone" "primary" {
+  name         = "codyfisher.dev."
+}
+
 resource "aws_s3_bucket" "website_bucket" {
   bucket = "codyfisher-website-bucket"
 
@@ -48,12 +52,14 @@ resource "aws_s3_bucket_policy" "website_bucket_policy" {
 }
 
 resource "aws_route53_record" "website_record" {
-  name = "codyfisher.dev"
+  name = "www.codyfisher.dev"
   type = "A"
-
+  zone_id = aws_route53_zone.primary.zone_id
+  ttl = 300
+  
   alias {
-    name                   = "${aws_cloudfront_distribution.website_distribution.domain_name}"
-    zone_id               = "${aws_cloudfront_distribution.website_distribution.hosted_zone_id}"
+    name                   = aws_cloudfront_distribution.website_distribution.domain_name
+    zone_id               = aws_cloudfront_distribution.website_distribution.hosted_zone_id
     evaluate_target_health = true
   }
 }
