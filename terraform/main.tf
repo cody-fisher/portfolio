@@ -18,7 +18,6 @@ provider "aws" {
   region = "us-east-1"
 }
 
-// testing
 resource "aws_s3_bucket" "website_bucket" {
   bucket = "codyfisher-website-bucket"
 
@@ -92,6 +91,13 @@ resource "aws_cloudfront_distribution" "website_distribution" {
   aliases = [
     "codyfisher.dev"
   ]
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "whitelist"
+      locations        = ["US", "CA"]
+    }
+  }
 
   viewer_certificate {
     acm_certificate_arn = aws_acm_certificate.portfolio.arn
