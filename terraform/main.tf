@@ -47,6 +47,15 @@ resource "aws_s3_bucket_policy" "website_bucket_policy" {
   })
 }
 
+resource "aws_s3_bucket" "logs_bucket" {
+  bucket = "codyfisher-cloudfront-logs-bucket"
+
+  tags = {
+    Terraform   = "True"
+    Environment = "Production"
+  }
+}
+
 resource "aws_route53_record" "website_record" {
   name = "codyfisher.dev"
   type = "A"
@@ -78,9 +87,8 @@ resource "aws_cloudfront_distribution" "website_distribution" {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "S3Origin"
-
-    forward_values = "all"
-
+    path_pattern = "/*"
+    bucket = aws_s3_bucket.logs_bucket.name
     viewer_protocol_policy = "redirect-to-https"
   }
 
@@ -101,5 +109,10 @@ resource "aws_cloudfront_distribution" "website_distribution" {
 
   viewer_certificate {
     acm_certificate_arn = aws_acm_certificate.portfolio.arn
+  }
+
+  tags = {
+    Terraform   = "True"
+    Environment = "Production"
   }
 }
