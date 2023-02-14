@@ -54,7 +54,7 @@ resource "aws_s3_bucket_policy" "website_bucket_policy" {
 resource "aws_route53_record" "website_record" {
   name = "www.codyfisher.dev"
   type = "A"
-  zone_id = aws_route53_zone.primary.zone_id
+  zone_id = data.aws_route53_zone.primary.zone_id
   ttl = 300
   
   alias {
