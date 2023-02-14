@@ -1,3 +1,19 @@
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+    }
+  }
+
+  cloud {
+    organization = "codyfisher"
+
+    workspaces {
+      name = "portfolio"
+    }
+  }
+}
+
 provider "aws" {
   region = "us-east-1"
 }
