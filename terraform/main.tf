@@ -14,10 +14,6 @@ terraform {
   }
 }
 
-provider "aws" {
-  region = "us-east-1"
-}
-
 data "aws_route53_zone" "primary" {
   name         = "codyfisher.dev."
 }
@@ -63,7 +59,7 @@ resource "aws_route53_record" "website_record" {
   }
 }
 
-resource "aws_acm_certificate" "portfolio" {
+resource "aws_acm_certificate" "portfolio_cert" {
   domain_name       = "codyfisher.dev"
   validation_method = "DNS"
 
@@ -102,7 +98,7 @@ resource "aws_cloudfront_distribution" "website_distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = aws_acm_certificate.portfolio.arn
+    acm_certificate_arn = aws_acm_certificate.portfolio_cert.arn
   }
 
   tags = {
